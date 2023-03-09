@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" />
+</head>
+<script src="/js/main.js"></script>
+<script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+<script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+
+<body>
+    <div class="mdui-container-fluid">
+        <div class="mdui-card mdui-center card">
+            <div class="mdui-card-media">
+                <button class="mdui-btn mdui-color-green-600 mdui-ripple mdui-center but" th:text="${data}"></button>
+                <div class="mdui-box">
+
+                    <table class="mdui-table mdui-table-hoverable">
+                        <tr>
+                            <th>id</th>
+                            <th>user</th>
+                            <th>pass</th>
+                            <th>name</th>
+                            <th>head</th>
+                            <th>ip</th>
+                        </tr>
+                        <tbody id="tbodydata">
+                            <tr>
+                                <td>---</td>
+                                <td>---</td>
+                                <td>---</td>
+                                <td>---</td>
+                                <td>---</td>
+                                <td>---</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <br>
+                <br>
+                <button class="mdui-btn mdui-color-blue-600 mdui-ripple mdui-center add" id="list">
+                    <i class="mdui-icon material-icons">playlist_play</i> 初始化
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $("#list").click(function () {
+        $.ajax({
+            type: "GET", //有form表单数据必须post
+            url: "/list",
+            dataType: 'JSON',
+            cache: false,                      // 不缓存
+            processData: false,                // jQuery不要去处理发送的数据
+            contentType: false,                // jQuery不要去设置Content-Type请求头
+            success: function (ret) {
+                console.log(ret);
+                var data = ret.data;
+                var str = "";
+                for (i in data) {
+                    str += "<tr>" +
+                        "<td>" + data[i].id + "</td>" +
+                        "<td>" + data[i].user + "</td>" +
+                        "<td>" + data[i].pass + "</td>" +
+                        "<td>" + data[i].name + "</td>" +
+                        "<td>" + data[i].head + "</td>" +
+                        "<td>" + data[i].ip + "</td>" +
+                        "</tr>";
+                }
+                document.getElementById("tbodydata").innerHTML = str;
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    });
+</script>
+
+</html>
